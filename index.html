@@ -9,18 +9,87 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="script.js"></script>
 
+    <script type="text/javascript">
+    	
+		    function CalcStreak(){
+
+		    request = new XMLHttpRequest();
+
+		    request.open("GET", "https://api.sportsdata.io/v3/nba/scores/json/Standings/2020?key=61aea92e2b69471e9bc3e47270eb3248", true);
+
+		    request.onreadystatechange = function() {
+
+		        if(request.readyState == 4 && request.status == 200)
+		        {
+		        	data = request.responseText;
+		        	data = JSON.parse(data);
+		            console.log(data);
+		            var is_streak = 0;
+		            var streak_num = 0;
+		            for (var i = 0; i < data.length; i++)
+		            {
+		                if(data[i].TeamID == 9)
+		                {
+		                    streak_num = data[i].Streak;
+		                    if(streak_num > 0)
+		                    {
+		                        is_streak = true;
+		                    }
+		                    else
+		                    {
+		                        is_streak = false;
+		                    }
+		                    console.log(is_streak);
+		                    console.log(streak_num);
+		                }
+		            }
+
+		            if(is_streak == true)
+		            {
+		                $('.streak').append("YOU BET BABY!!!");
+		                $('.num').append(streak_num + " WINS IN A ROW WE'RE MILLIONAIRES!");
+		                $('body').css("background-color", "#008853");
+		                $('p').css("color", "#BC9A5C");
+		                $('h3').css("color", "#BC9A5C");
+		                $('h1').css("color", "#BC9A5C");
+		            }
+		            else
+		            {
+		                streak_num = streak_num * -1;
+		                $('.streak').append("eh not exactly");
+		                $('.num').append(streak_num + " wins stolen by corrupt refs") ;  
+		                $('body').css("background-color", "#FDBA21");
+		                $('p').css("color", "#552084") ; 
+		                $('h3').css("color", "#552084") ;
+		                $('h1').css("color", "#552084") ;  
+		            }
+		        }
+		        
+		    }
+		    request.send();
+		}
+
+    </script>
+
     <style type="text/css">
     	AnswerContainer {align-content: center; min-height: 100%; min-width: 100%; vertical-align: middle; display: flex;}
     	p {font-size: 8vw; text-align: center; vertical-align: middle; }
     </style>
 </head>
-<body>
+<body onload="CalcStreak()">
     
 
 <div class="AnswerContainer">
     <p class = "streak"></p>
     <p class = "num"></p>
 </div>
+
+<h1>Info</h1>
+
+<h3>The API provides information about the NBA season. </br>
+   Found at: https://sportsdata.io/ </br>
+   I'm taking the 2020 part of the Standings section, and checking the Streak of the Boston Celtics. </br>
+   It can let you know if your favorite team is on a win streak, or if any NBA games are on right now.</h3>
 
 </body>
 </html>
